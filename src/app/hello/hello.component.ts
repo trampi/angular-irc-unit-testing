@@ -1,6 +1,6 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NameService} from '../name.service';
-import {Observable} from 'rxjs';
+import {from, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-hello',
@@ -17,7 +17,7 @@ export class HelloComponent implements OnInit {
   constructor(private nameService: NameService) { }
 
   ngOnInit(): void {
-    this.name$ = this.nameService.get();
+    this.name$ = from(this.nameService.get());
     this.name$.subscribe(name => this.name.emit(name));
   }
 

@@ -2,16 +2,15 @@ import {async, ComponentFixture, TestBed,} from '@angular/core/testing';
 
 import {HelloComponent} from './hello.component';
 import {NameService} from '../name.service';
-import {Subject} from 'rxjs';
 
 describe('HelloComponent', () => {
   let component: HelloComponent;
   let fixture: ComponentFixture<HelloComponent>;
-  const nameSubject = new Subject<string>();
+  let namePromiseResolve: any;
 
   beforeEach(async(() => {
     const mockNameService: NameService = {
-      get: () => nameSubject
+      get: () => new Promise(resolve => namePromiseResolve = resolve)
     };
 
     TestBed.configureTestingModule({
@@ -40,19 +39,17 @@ describe('HelloComponent', () => {
       let hasEmitted = false;
       component.name.subscribe((e: string) => hasEmitted = true);
 
-      fixture.detectChanges();
-
       expect(hasEmitted).toEqual(false);
     });
   });
 
   describe('when the name has loaded', () => {
-    it('emits a change event', () => {
-      const event = 'Test Name';
+    it('emits a change event', async () => {
       let emittedValue = null;
 
       component.name.subscribe(e => emittedValue = e);
-      nameSubject.next('cadabrax');
+      namePromiseResolve('cadabrax');
+      await fixture.whenStable();
 
       expect(emittedValue).toEqual('cadabrax');
     });

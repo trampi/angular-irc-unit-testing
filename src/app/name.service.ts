@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +7,8 @@ export class NameService {
 
   constructor() { }
 
-  get(): Observable<string> {
-    return of('cadabrax');
+  async get(): Promise<string> {
+    return 'cadabrax';
   }
 
 }
